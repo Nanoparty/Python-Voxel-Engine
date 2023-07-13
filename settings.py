@@ -6,6 +6,9 @@ import math
 # resolution
 WIN_RES = glm.vec2(1280, 720)
 
+# ray casting
+MAX_RAY_DIST = 6
+
 # chunk
 CHUNK_SIZE = 32
 H_CHUNK_SIZE = CHUNK_SIZE // 2
