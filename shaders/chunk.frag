@@ -4,6 +4,7 @@ layout (location = 0) out vec4 fragColor;
 
 const vec3 gamma = vec3(2.2);
 const vec3 inv_gamma = 1 / gamma;
+const vec3 bg_color = vec3(0.58, 0.83, 0.99);
 
 uniform sampler2DArray u_texture_array_0;
 
@@ -26,5 +27,12 @@ void main(){
     tex_col *= shading;
 
     tex_col = pow(tex_col, inv_gamma);
+
+    //fog
+    float fog_dist = gl_FragCoord.z / gl_FragCoord.w;
+    tex_col = mix(tex_col, bg_color, (1.0 - exp2(-0.000015 * fog_dist * fog_dist)));
+
     fragColor = vec4(tex_col, 1);
+
+    
 }
