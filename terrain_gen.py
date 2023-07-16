@@ -50,7 +50,7 @@ def set_voxel_id(voxels, x, y, z, wx, wy, wz, world_height):
         rng = int(7 * random())
         ry = wy - rng
         if SNOW_LVL <= ry < world_height:
-            voxel_id = SNOW
+            voxel_id = SNOWY_GRASS
 
         elif STONE_LVL <= ry < SNOW_LVL:
             voxel_id = STONE
