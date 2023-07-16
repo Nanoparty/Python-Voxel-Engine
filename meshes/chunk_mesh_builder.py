@@ -85,6 +85,9 @@ def is_void(local_voxel_pos, world_voxel_pos, world_voxels, voxel_id):
 
    if voxel_id != 8 and chunk_voxels[voxel_index] == 8:
        return True
+   
+   if chunk_voxels[voxel_index] == 6:
+       return True
 
    if chunk_voxels[voxel_index]:
        return False
