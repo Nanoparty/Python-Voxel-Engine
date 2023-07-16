@@ -26,7 +26,7 @@ class Player(Camera):
         # changing block types
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_0:
-                voxel_handler.set_voxel_id(0)
+                voxel_handler.set_voxel_id(10)
             if event.key == pg.K_1:
                 voxel_handler.set_voxel_id(1)
             if event.key == pg.K_2:
@@ -43,6 +43,8 @@ class Player(Camera):
                 voxel_handler.set_voxel_id(7)
             if event.key == pg.K_8:
                 voxel_handler.set_voxel_id(8)
+            if event.key == pg.K_9:
+                voxel_handler.set_voxel_id(9)
 
     def mouse_control(self):
         mouse_dx, mouse_dy = pg.mouse.get_rel()
