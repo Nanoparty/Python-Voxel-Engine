@@ -3,6 +3,9 @@ import numpy as np
 import glm
 import math
 
+# OpenGL settings
+NUM_SAMPLES = 4 # antialiasing
+
 # resolution
 WIN_RES = glm.vec2(1280, 720)
 
@@ -48,6 +51,7 @@ MOUSE_SENSITIVITY = 0.002
 BG_COLOR = glm.vec3(0.58, 0.83, 0.99)
 
 # textures
+VOID = 0
 SAND = 1
 GRASS = 2
 DIRT = 3
@@ -55,6 +59,9 @@ STONE = 4
 SNOW = 5
 LEAVES = 6
 WOOD = 7
+WATER = 8
+
+TRANSPARENT_BLOCKS = [0, 6, 8]
 
 # terrain levels
 SNOW_LVL = 54
@@ -62,6 +69,7 @@ STONE_LVL = 49
 DIRT_LVL = 40
 GRASS_LVL = 8
 SAND_LVL = 7
+WATER_LVL = 5
 
 # tree settings
 TREE_PROBABILITY = 0.02

@@ -68,6 +68,9 @@ class VoxelHandler:
         else:
             self.remove_voxel()
 
+    def set_voxel_id(self, id):
+        self.new_voxel_id = id;
+
     def switch_mode(self):
         self.interaction_mode = not self.interaction_mode
 

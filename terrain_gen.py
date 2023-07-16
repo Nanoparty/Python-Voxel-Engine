@@ -46,7 +46,7 @@ def set_voxel_id(voxels, x, y, z, wx, wy, wz, world_height):
             voxel_id = 0
         else:
             voxel_id = STONE
-    else:
+    elif wy == world_height - 1:
         rng = int(7 * random())
         ry = wy - rng
         if SNOW_LVL <= ry < world_height:
@@ -64,12 +64,20 @@ def set_voxel_id(voxels, x, y, z, wx, wy, wz, world_height):
         else:
             voxel_id = SAND
 
+    
+
     # setting ID
     voxels[get_index(x, y, z)] = voxel_id
-
+    
     # place tree
     if wy < DIRT_LVL:
         place_tree(voxels, x, y, z, voxel_id)
+
+    # place water
+    if wy < WATER_LVL:
+        water_height = WATER_LVL - wy
+        for iy in range(1, water_height):
+            voxels[get_index(x, y + iy, z)] = WATER
 
 @njit
 def place_tree(voxels, x, y, z, voxel_id):

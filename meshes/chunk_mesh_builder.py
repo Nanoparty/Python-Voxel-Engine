@@ -2,39 +2,39 @@ from settings import *
 from numba import uint8, njit
 
 @njit
-def get_ao(local_pos, world_pos, world_voxels, plane):
+def get_ao(local_pos, world_pos, world_voxels, plane, voxel_id):
     x, y, z = local_pos
     wx, wy, wz = world_pos
 
     if plane == 'Y':
-        a = is_void((x, y, z - 1), (wx, wy, wz - 1), world_voxels)
-        b = is_void((x - 1, y, z -1),(wx -1, wy, wz - 1), world_voxels)
-        c = is_void((x - 1, y, z), (wx - 1, wy, wz), world_voxels)
-        d = is_void((x - 1, y, z + 1), (wx - 1, wy, wz + 1), world_voxels)
-        e = is_void((x, y, z + 1), (wx, wy, wz + 1), world_voxels)
-        f = is_void((x + 1, y, z + 1), (wx + 1, wy, wz + 1), world_voxels)
-        g = is_void((x + 1, y, z), (wx + 1, wy, wz), world_voxels)
-        h = is_void((x + 1, y, z - 1), (wx + 1, wy, wz - 1), world_voxels)
+        a = is_void((x, y, z - 1), (wx, wy, wz - 1), world_voxels, voxel_id)
+        b = is_void((x - 1, y, z -1),(wx -1, wy, wz - 1), world_voxels, voxel_id)
+        c = is_void((x - 1, y, z), (wx - 1, wy, wz), world_voxels, voxel_id)
+        d = is_void((x - 1, y, z + 1), (wx - 1, wy, wz + 1), world_voxels, voxel_id)
+        e = is_void((x, y, z + 1), (wx, wy, wz + 1), world_voxels, voxel_id)
+        f = is_void((x + 1, y, z + 1), (wx + 1, wy, wz + 1), world_voxels, voxel_id)
+        g = is_void((x + 1, y, z), (wx + 1, wy, wz), world_voxels, voxel_id)
+        h = is_void((x + 1, y, z - 1), (wx + 1, wy, wz - 1), world_voxels, voxel_id)
 
     if plane == 'X':
-        a = is_void((x, y, z - 1), (wx, wy, wz - 1), world_voxels)
-        b = is_void((x, y - 1, z - 1), (wx, wy - 1, wz - 1), world_voxels)
-        c = is_void((x, y - 1, z), (wx, wy - 1, wz), world_voxels)
-        d = is_void((x, y - 1, z + 1), (wx, wy - 1, wz + 1), world_voxels)
-        e = is_void((x, y, z + 1), (wx, wy, wz + 1), world_voxels)
-        f = is_void((x, y + 1, z + 1), (wx, wy + 1, wz + 1), world_voxels)
-        g = is_void((x, y + 1, z), (wx, wy + 1, wz), world_voxels)
-        h = is_void((x, y + 1, z - 1), (wx, wy + 1, wz - 1), world_voxels)
+        a = is_void((x, y, z - 1), (wx, wy, wz - 1), world_voxels, voxel_id)
+        b = is_void((x, y - 1, z - 1), (wx, wy - 1, wz - 1), world_voxels, voxel_id)
+        c = is_void((x, y - 1, z), (wx, wy - 1, wz), world_voxels, voxel_id)
+        d = is_void((x, y - 1, z + 1), (wx, wy - 1, wz + 1), world_voxels, voxel_id)
+        e = is_void((x, y, z + 1), (wx, wy, wz + 1), world_voxels, voxel_id)
+        f = is_void((x, y + 1, z + 1), (wx, wy + 1, wz + 1), world_voxels, voxel_id)
+        g = is_void((x, y + 1, z), (wx, wy + 1, wz), world_voxels, voxel_id)
+        h = is_void((x, y + 1, z - 1), (wx, wy + 1, wz - 1), world_voxels, voxel_id)
 
     if plane == 'Z':
-        a = is_void((x - 1, y    , z), (wx - 1, wy    , wz), world_voxels)
-        b = is_void((x - 1, y - 1, z), (wx - 1, wy - 1, wz), world_voxels)
-        c = is_void((x    , y - 1, z), (wx    , wy - 1, wz), world_voxels)
-        d = is_void((x + 1, y - 1, z), (wx + 1, wy - 1, wz), world_voxels)
-        e = is_void((x + 1, y    , z), (wx + 1, wy    , wz), world_voxels)
-        f = is_void((x + 1, y + 1, z), (wx + 1, wy + 1, wz), world_voxels)
-        g = is_void((x    , y + 1, z), (wx    , wy + 1, wz), world_voxels)
-        h = is_void((x - 1, y + 1, z), (wx - 1, wy + 1, wz), world_voxels)
+        a = is_void((x - 1, y    , z), (wx - 1, wy    , wz), world_voxels, voxel_id)
+        b = is_void((x - 1, y - 1, z), (wx - 1, wy - 1, wz), world_voxels, voxel_id)
+        c = is_void((x    , y - 1, z), (wx    , wy - 1, wz), world_voxels, voxel_id)
+        d = is_void((x + 1, y - 1, z), (wx + 1, wy - 1, wz), world_voxels, voxel_id)
+        e = is_void((x + 1, y    , z), (wx + 1, wy    , wz), world_voxels, voxel_id)
+        f = is_void((x + 1, y + 1, z), (wx + 1, wy + 1, wz), world_voxels, voxel_id)
+        g = is_void((x    , y + 1, z), (wx    , wy + 1, wz), world_voxels, voxel_id)
+        h = is_void((x - 1, y + 1, z), (wx - 1, wy + 1, wz), world_voxels, voxel_id)
 
     ao = (a + b + c), (g + h + a), (e + f + g), (c + d + e)
     return ao
@@ -74,7 +74,7 @@ def get_chunk_index(world_voxel_pos):
     return index
 
 @njit
-def is_void(local_voxel_pos, world_voxel_pos, world_voxels):
+def is_void(local_voxel_pos, world_voxel_pos, world_voxels, voxel_id):
    chunk_index = get_chunk_index(world_voxel_pos)
    if chunk_index == -1:
        return False
@@ -83,8 +83,12 @@ def is_void(local_voxel_pos, world_voxel_pos, world_voxels):
    x, y, z = local_voxel_pos
    voxel_index = x % CHUNK_SIZE + z % CHUNK_SIZE * CHUNK_SIZE + y % CHUNK_SIZE * CHUNK_AREA
 
+   if voxel_id != 8 and chunk_voxels[voxel_index] == 8:
+       return True
+
    if chunk_voxels[voxel_index]:
        return False
+   
    return True
 
 @njit
@@ -113,9 +117,9 @@ def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels):
                 wy = y + cy * CHUNK_SIZE
 
                 # top face
-                if is_void((x, y + 1, z), (wx, wy + 1, wz), world_voxels):
+                if is_void((x, y + 1, z), (wx, wy + 1, wz), world_voxels, voxel_id):
                     # get ao values
-                    ao = get_ao((x, y + 1, z), (wx, wy + 1, wz), world_voxels, plane='Y')
+                    ao = get_ao((x, y + 1, z), (wx, wy + 1, wz), world_voxels,'Y', voxel_id)
                     flip_id = ao[1] + ao[3] > ao[0] + ao[2]
 
                     # format: x, y, z, voxel_id, face_id, ao_id
@@ -130,8 +134,8 @@ def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels):
                         index = add_data(vertex_data, index, v0, v3, v2, v0, v2, v1)
 
                 # bottom face
-                if is_void((x, y - 1, z), (wx, wy - 1, wz), world_voxels):
-                    ao = get_ao((x, y - 1, z), (wx, wy - 1, wz), world_voxels, plane='Y')
+                if is_void((x, y - 1, z), (wx, wy - 1, wz), world_voxels, voxel_id):
+                    ao = get_ao((x, y - 1, z), (wx, wy - 1, wz), world_voxels,'Y', voxel_id)
                     flip_id = ao[1] + ao[3] > ao[0] + ao[2]
 
                     v0 = pack_data(x    , y, z    , voxel_id, 1, ao[0], flip_id)
@@ -145,8 +149,8 @@ def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels):
                         index = add_data(vertex_data, index, v0, v2, v3, v0, v1, v2)
 
                 # right face
-                if is_void((x + 1, y, z), (wx + 1, wy, wz), world_voxels):
-                    ao = get_ao((x + 1, y, z), (wx + 1, wy, wz), world_voxels, plane='X')
+                if is_void((x + 1, y, z), (wx + 1, wy, wz), world_voxels, voxel_id):
+                    ao = get_ao((x + 1, y, z), (wx + 1, wy, wz), world_voxels, 'X', voxel_id)
                     flip_id = ao[1] + ao[3] > ao[0] + ao[2]
 
                     v0 = pack_data(x + 1, y    , z    , voxel_id, 2, ao[0], flip_id)
@@ -160,8 +164,8 @@ def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels):
                         index = add_data(vertex_data, index, v0, v1, v2, v0, v2, v3)
 
                 # left face
-                if is_void((x - 1, y, z), (wx - 1, wy, wz), world_voxels):
-                    ao = get_ao((x - 1, y, z), (wx - 1, wy, wz), world_voxels, plane='X')
+                if is_void((x - 1, y, z), (wx - 1, wy, wz), world_voxels, voxel_id):
+                    ao = get_ao((x - 1, y, z), (wx - 1, wy, wz), world_voxels, 'X', voxel_id)
                     flip_id = ao[1] + ao[3] > ao[0] + ao[2]
 
                     v0 = pack_data(x, y    , z    , voxel_id, 3, ao[0], flip_id)
@@ -175,8 +179,8 @@ def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels):
                         index = add_data(vertex_data, index, v0, v2, v1, v0, v3, v2)
 
                 # back face
-                if is_void((x, y, z - 1), (wx, wy, wz - 1), world_voxels):
-                    ao = get_ao((x, y, z - 1), (wx, wy, wz - 1), world_voxels, plane='Z')
+                if is_void((x, y, z - 1), (wx, wy, wz - 1), world_voxels, voxel_id):
+                    ao = get_ao((x, y, z - 1), (wx, wy, wz - 1), world_voxels, 'Z', voxel_id)
                     flip_id = ao[1] + ao[3] > ao[0] + ao[2]
 
                     v0 = pack_data(x,     y,     z, voxel_id, 4, ao[0], flip_id)
@@ -190,8 +194,8 @@ def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels):
                         index = add_data(vertex_data, index, v0, v1, v2, v0, v2, v3)
 
                 # front face
-                if is_void((x, y, z + 1), (wx, wy, wz + 1), world_voxels):
-                    ao = get_ao((x, y, z + 1), (wx, wy, wz + 1), world_voxels, plane='Z')
+                if is_void((x, y, z + 1), (wx, wy, wz + 1), world_voxels, voxel_id):
+                    ao = get_ao((x, y, z + 1), (wx, wy, wz + 1), world_voxels, 'Z', voxel_id)
                     flip_id = ao[1] + ao[3] > ao[0] + ao[2]
 
                     v0 = pack_data(x    , y    , z + 1, voxel_id, 5, ao[0], flip_id)

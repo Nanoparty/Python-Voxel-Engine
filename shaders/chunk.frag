@@ -21,18 +21,26 @@ void main(){
 
     vec3 tex_col = texture(u_texture_array_0, vec3(face_uv, voxel_id)).rgb;
     tex_col = pow(tex_col, gamma);
+    vec3 tex_col_flat = tex_col;
 
     // tex_col.rgb *= voxel_color;
     //tex_col = tex_col * 0.001 + vec3(1);
     tex_col *= shading;
 
     tex_col = pow(tex_col, inv_gamma);
+    tex_col_flat = pow(tex_col, inv_gamma);
 
     //fog
     float fog_dist = gl_FragCoord.z / gl_FragCoord.w;
-    tex_col = mix(tex_col, bg_color, (1.0 - exp2(-0.000015 * fog_dist * fog_dist)));
+    tex_col = mix(tex_col, bg_color, (1.0 - exp2(-0.0000005 * fog_dist * fog_dist)));
 
     fragColor = vec4(tex_col, 1);
+    vec4 fragFlatColor = vec4(tex_col_flat, 1);
+    fragColor.a = (fragFlatColor.r + fragFlatColor.b + fragFlatColor.g <= 0.1) ? 0.0: 1.0;
 
+    if (voxel_id == 8){
+        fragColor.a = 0.5;
+    }
+    
     
 }
