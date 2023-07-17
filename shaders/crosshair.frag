@@ -1,20 +1,11 @@
-#version 410 core
-
-// layout (location = 0) out vec4 fragColor;
-
-// in vec2 uv;
-
-// uniform sampler2D u_texture_0;
-
-// void main() {
-//     fragColor = texture(u_texture_0, uv);
-//     fragColor.a = (fragColor.r + fragColor.g + fragColor.b  == 0) ? 0.0: 1.0;
-// }
+#version 330 core
 
 layout (location = 0) out vec4 fragColor;
 
-in vec3 color;
+uniform sampler2D crosshair_texture;
+
+in vec2 uv;
 
 void main(){
-    fragColor = vec4(color, 1.0);
+    fragColor = vec4(texture(crosshair_texture, uv).rgb, 1.0);
 }

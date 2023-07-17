@@ -8,7 +8,7 @@ class ShaderProgram:
         #---------shaders-------------#
         self.chunk = self.get_program(shader_name='chunk')
         self.voxel_marker = self.get_program(shader_name='voxel_marker')
-        #self.crosshair = self.get_program(shader_name='crosshair')
+        self.crosshair = self.get_program(shader_name='crosshair')
         #-----------------------------#
         self.set_uniforms_on_init()
 
@@ -24,9 +24,9 @@ class ShaderProgram:
         self.voxel_marker['u_texture_0'] = 0
 
         # crosshair
-        # self.crosshair['m_proj'].write(self.player.m_proj)
-        # self.crosshair['m_model'].write(glm.mat4())
-        # self.crosshair['crosshair_texture'] = 2
+        self.crosshair['m_proj'].write(self.player.m_proj)
+        self.crosshair['m_model'].write(glm.mat4())
+        self.crosshair['crosshair_texture'] = 2
 
     def update(self):
         self.chunk['m_view'].write(self.player.m_view)

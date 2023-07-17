@@ -2,8 +2,8 @@
 
 layout (location = 0) out vec4 fragColor;
 
-in vec3 color;
+uniform sampler2DArray crosshair_texture;
 
 void main(){
-    fragColor = vec4(color, 1.0);
+    fragColor = texture(crosshair_texture, uv);
 }

@@ -8,7 +8,7 @@ class Scene:
         self.app = app
         self.world = World(self.app)
         self.voxel_marker = VoxelMarker(self.world.voxel_handler)
-        #self.crosshair = Crosshair(app)
+        self.crosshair = Crosshair(app)
 
     def update(self):
         self.world.update()
@@ -17,4 +17,4 @@ class Scene:
     def render(self):
         self.world.render()
         self.voxel_marker.render()
-        #self.crosshair.render()
+        self.crosshair.render()
