@@ -64,8 +64,6 @@ def set_voxel_id(voxels, x, y, z, wx, wy, wz, world_height):
         else:
             voxel_id = SAND
 
-    
-
     # setting ID
     voxels[get_index(x, y, z)] = voxel_id
     
@@ -107,7 +105,7 @@ def place_tree(voxels, x, y, z, voxel_id):
 
     # tree trunk
     for iy in range(1, TREE_HEIGHT - 2):
-        voxels[get_index(x, y + iy, z)] = WOOD
+        voxels[get_index(x, y + iy, z)] = OAK_WOOD
 
     # top
     voxels[get_index(x, y + TREE_HEIGHT - 2, z)] = LEAVES

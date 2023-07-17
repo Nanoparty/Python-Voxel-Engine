@@ -1,17 +1,22 @@
 import pygame as pg
 from camera import Camera
 from settings import *
+from world_objects.crosshair import Crosshair
 
 class Player(Camera):
     def __init__(self, app, position=PLAYER_POS, yaw=-90, pitch=0):
         self.app = app
         super().__init__(position, yaw, pitch)
+        
 
     def update(self):
         self.keyboard_controls()
         self.mouse_control()
         super().update()
 
+    def render(self):
+        pass
+    
     def handle_event(self, event):
         voxel_handler = self.app.scene.world.voxel_handler
 

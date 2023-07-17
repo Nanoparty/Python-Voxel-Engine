@@ -9,10 +9,12 @@ class Textures:
         # load texture
         self.texture_0 = self.load('frame.png')
         self.texture_array_0 = self.load('tex_array_1.png', is_tex_array=True)
+        self.crosshair_texture = self.load('crosshair.png')
 
         # assign texture unit
         self.texture_0.use(location=0)
         self.texture_array_0.use(location=1)
+        self.crosshair_texture.use(location=2)
 
     def load(self, file_name, is_tex_array=False):
         texture = pg.image.load(f'assets/{file_name}')

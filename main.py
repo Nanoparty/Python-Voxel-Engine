@@ -16,7 +16,7 @@ class VoxelEngine:
         pg.display.gl_set_attribute(pg.GL_DEPTH_SIZE, 24)
         pg.display.gl_set_attribute(pg.GL_MULTISAMPLESAMPLES, NUM_SAMPLES)
 
-        pg.display.set_mode(WIN_RES, flags=pg.OPENGL | pg.DOUBLEBUF)
+        self.game_display = pg.display.set_mode(WIN_RES, flags=pg.OPENGL | pg.DOUBLEBUF)
         self.ctx = mgl.create_context()
 
         self.ctx.enable(flags=mgl.DEPTH_TEST | mgl.CULL_FACE | mgl.BLEND)
@@ -51,7 +51,10 @@ class VoxelEngine:
     def render(self):
         self.ctx.clear(color=BG_COLOR)
         self.scene.render()
+        self.player.render()
         pg.display.flip()
+
+
 
     def handle_events(self):
         for event in pg.event.get():
