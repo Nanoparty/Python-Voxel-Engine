@@ -104,8 +104,12 @@ def place_tree(voxels, x, y, z, voxel_id):
         m += 1 if n > 0 else 3 if n > 1 else 0
 
     # tree trunk
+    tree_type = random()
     for iy in range(1, TREE_HEIGHT - 2):
-        voxels[get_index(x, y + iy, z)] = OAK_WOOD
+        if tree_type > 0.5:
+            voxels[get_index(x, y + iy, z)] = OAK_WOOD
+        elif tree_type <= 0.5:
+            voxels[get_index(x, y + iy, z)] = BIRCH_WOOD
 
     # top
     voxels[get_index(x, y + TREE_HEIGHT - 2, z)] = LEAVES
