@@ -70,6 +70,10 @@ class VoxelHandler:
 
     def set_voxel_id(self, id):
         self.new_voxel_id = id;
+        if self.new_voxel_id < 1:
+            self.new_voxel_id = NUM_BLOCKS
+        if self.new_voxel_id > NUM_BLOCKS:
+            self.new_voxel_id = 1
 
     def switch_mode(self):
         self.interaction_mode = not self.interaction_mode

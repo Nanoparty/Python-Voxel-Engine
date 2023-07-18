@@ -51,6 +51,13 @@ class Player(Camera):
             if event.key == pg.K_9:
                 voxel_handler.set_voxel_id(9)
 
+        if event.type == pg.MOUSEWHEEL:
+            print(event.x, event.y)
+            if event.y == 1:
+                voxel_handler.set_voxel_id(voxel_handler.new_voxel_id + 1)
+            if event.y == -1:
+                voxel_handler.set_voxel_id(voxel_handler.new_voxel_id - 1)
+
     def mouse_control(self):
         mouse_dx, mouse_dy = pg.mouse.get_rel()
         if mouse_dx:
