@@ -11,18 +11,21 @@ class QuadMesh(BaseMesh):
         self.program = app.shader_program.quad
 
         self.vbo_format = '3f 3f'
-        self.attrs = ('in_position', 'in_color',)
+        self.attrs = ('in_position', 'tex_coords',)
         self.vao = self.get_vao()
 
     def get_vertex_data(self):
+
         vertices = [
             (0.1, 0.1, 0.0), (-0.1, 0.1, 0.0), (-0.1, -0.1, 0.0),
             (0.1, 0.1, 0.0), (-0.1, -0.1, 0.0), (0.1, -0.1, 0.0)
         ]
-        colors = [
-            (1, 1, 0), (-1, 1, 0), (-1, -1, 0),
-            (1, 1, 0), (-1, -1, 0), (1, -1, 0)
+        tex_coords = [
+            (1, 1, 0), (0, 1, 0), (0, 0, 0),
+            (1, 1, 0), (0, 0, 0), (1, 0, 0)
         ]
+
+        
         # tex_coord_vertices = [(0, 0), (1, 0), (1, 1), (0, 1)]
         # tex_coord_indices = [
         #     (0, 2, 3), (0, 1, 2),
@@ -41,6 +44,6 @@ class QuadMesh(BaseMesh):
         #     1.0, -1.0, 1.0, 1.0,
         # ]
         # vertex_data = np.array(quad_buffer, dtype='float16')
-        vertex_data = np.hstack([vertices, colors], dtype='float32')
+        vertex_data = np.hstack([vertices, tex_coords], dtype='float32')
         # return vertex_data
         return vertex_data

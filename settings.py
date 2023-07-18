@@ -4,7 +4,7 @@ import glm
 import math
 
 # OpenGL settings
-NUM_SAMPLES = 4 # antialiasing
+NUM_SAMPLES = 16 # antialiasing
 
 # resolution
 WIN_RES = glm.vec2(1280, 720)

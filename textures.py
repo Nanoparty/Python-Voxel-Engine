@@ -9,7 +9,7 @@ class Textures:
         # load texture
         self.texture_0 = self.load('frame.png')
         self.texture_array_0 = self.load('tex_array_1.png', is_tex_array=True)
-        self.crosshair_texture = self.load('bricks.png')
+        self.crosshair_texture = self.load('crosshair.png')
 
         # assign texture unit
         self.texture_0.use(location=0)
