@@ -10,6 +10,7 @@ class ShaderProgram:
         self.voxel_marker = self.get_program(shader_name='voxel_marker')
         self.quad = self.get_program(shader_name='quad')
         self.hotbar = self.get_program(shader_name='hotbar')
+        self.hotbar_icon = self.get_program(shader_name='hotbar_icon')
         #-----------------------------#
         self.set_uniforms_on_init()
 
@@ -29,6 +30,9 @@ class ShaderProgram:
 
         # hotbar
         self.hotbar['u_texture_0'] = 3
+
+        # hotbar icon
+        self.hotbar_icon['u_texture_array_0'] = 1
 
 
     def update(self):

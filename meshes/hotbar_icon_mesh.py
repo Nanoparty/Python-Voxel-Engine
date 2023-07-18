@@ -8,7 +8,7 @@ class HotBarIconMesh(BaseMesh):
 
         self.app = app;
         self.ctx = app.ctx
-        self.program = app.shader_program.hotbar
+        self.program = app.shader_program.hotbar_icon
 
         self.vbo_format = '3f 3f'
         self.attrs = ('in_position', 'tex_coords',)
@@ -18,8 +18,8 @@ class HotBarIconMesh(BaseMesh):
 
         length = 0.06 * ASPECT_RATIO
         vertices = [
-            (0.03, -0.82, 0.0), (-0.03, -0.82, 0.0), (-0.03, -0.82 - length, 0.0),
-            (0.03, -0.82, 0.0), (-0.03, -0.82 - length, 0.0), (0.03, -0.82 - length, 0.0)
+            (0.03, -0.83, 0.0), (-0.03, -0.83, 0.0), (-0.03, -0.83 - length, 0.0),
+            (0.03, -0.83, 0.0), (-0.03, -0.83 - length, 0.0), (0.03, -0.83 - length, 0.0)
         ]
         tex_coords = [
             (1, 1, 0), (0, 1, 0), (0, 0, 0),
