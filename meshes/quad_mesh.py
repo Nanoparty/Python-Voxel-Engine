@@ -16,9 +16,10 @@ class QuadMesh(BaseMesh):
 
     def get_vertex_data(self):
 
+        length = 0.1 * ASPECT_RATIO
         vertices = [
-            (0.1, 0.1, 0.0), (-0.1, 0.1, 0.0), (-0.1, -0.1, 0.0),
-            (0.1, 0.1, 0.0), (-0.1, -0.1, 0.0), (0.1, -0.1, 0.0)
+            (0.1, length, 0.0), (-0.1, length, 0.0), (-0.1, -length, 0.0),
+            (0.1, length, 0.0), (-0.1, -length, 0.0), (0.1, -length, 0.0)
         ]
         tex_coords = [
             (1, 1, 0), (0, 1, 0), (0, 0, 0),
