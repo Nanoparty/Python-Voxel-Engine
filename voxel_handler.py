@@ -58,6 +58,8 @@ class VoxelHandler:
             self.rebuild_adj_chunk((wx, wy, wz + 1))
             
     def remove_voxel(self):
+        if self.voxel_index == None:
+            return
         self.chunk.voxels[self.voxel_index] = 0
         self.chunk.mesh.rebuild()
         self.rebuild_adjacent_chunks()
