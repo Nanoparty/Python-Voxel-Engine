@@ -11,6 +11,7 @@ class ShaderProgram:
         self.quad = self.get_program(shader_name='quad')
         self.hotbar = self.get_program(shader_name='hotbar')
         self.hotbar_icon = self.get_program(shader_name='hotbar_icon')
+        self.inventory = self.get_program(shader_name='inventory')
         #-----------------------------#
         self.set_uniforms_on_init()
 
@@ -33,6 +34,9 @@ class ShaderProgram:
 
         # hotbar icon
         self.hotbar_icon['u_texture_array_0'] = 1
+
+        # inventory
+        self.inventory['u_texture_0'] = 5
 
 
     def update(self):

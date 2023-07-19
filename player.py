@@ -7,6 +7,7 @@ class Player(Camera):
     def __init__(self, app, position=PLAYER_POS, yaw=-90, pitch=0):
         self.app = app
         super().__init__(position, yaw, pitch)
+        self.open_inventory = False
         
 
     def update(self):
@@ -19,7 +20,17 @@ class Player(Camera):
     
     def handle_event(self, event, pg):
         voxel_handler = self.app.scene.world.voxel_handler
+        inventory = self.app.scene.inventory
 
+        # toggle inventory
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_e:
+                inventory.toggle_visible()
+                self.open_inventory = 1 - self.open_inventory
+                if self.open_inventory:
+                    pg.mouse.set_visible(True)
+                else:
+                    pg.mouse.set_visible(False)
         
         if event.type == pg.MOUSEBUTTONDOWN:
 
@@ -64,6 +75,9 @@ class Player(Camera):
         
 
     def mouse_control(self):
+        if self.open_inventory:
+            return
+        
         mouse_dx, mouse_dy = pg.mouse.get_rel()
         if mouse_dx:
             self.rotate_yaw(delta_x=mouse_dx * MOUSE_SENSITIVITY)
@@ -71,6 +85,9 @@ class Player(Camera):
             self.rotate_pitch(delta_y=mouse_dy * MOUSE_SENSITIVITY)
 
     def keyboard_controls(self):
+        if self.open_inventory:
+            return
+        
         key_state = pg.key.get_pressed()
         vel = PLAYER_SPEED * self.app.delta_time
         if key_state[pg.K_w]:
