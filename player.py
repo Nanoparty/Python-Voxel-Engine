@@ -10,9 +10,9 @@ class Player(Camera):
         self.open_inventory = False
         
 
-    def update(self):
+    def update(self, pg):
         self.keyboard_controls()
-        self.mouse_control()
+        self.mouse_control(pg)
         super().update()
 
     def render(self):
@@ -31,6 +31,8 @@ class Player(Camera):
                     pg.mouse.set_visible(True)
                 else:
                     pg.mouse.set_visible(False)
+                    pg.mouse.set_pos(WIN_RES.x / 2, WIN_RES.y / 2)
+                    pg.mouse.get_rel()
         
         if event.type == pg.MOUSEBUTTONDOWN:
 
@@ -74,7 +76,7 @@ class Player(Camera):
 
         
 
-    def mouse_control(self):
+    def mouse_control(self, pg):
         if self.open_inventory:
             return
         
@@ -83,6 +85,8 @@ class Player(Camera):
             self.rotate_yaw(delta_x=mouse_dx * MOUSE_SENSITIVITY)
         if mouse_dy:
             self.rotate_pitch(delta_y=mouse_dy * MOUSE_SENSITIVITY)
+
+        pg.mouse.set_pos(WIN_RES.x / 2, WIN_RES.y / 2)
 
     def keyboard_controls(self):
         if self.open_inventory:
