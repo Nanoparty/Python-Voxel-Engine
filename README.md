@@ -2,8 +2,8 @@
 A Voxel Engine written in Python and OpenGL
 
 
-![version](https://img.shields.io/badge/Version-3.0-green)
-![engine](https://img.shields.io/badge/Engine-Unity-blue)
+![version](https://img.shields.io/badge/Version-1.0-green)
+![engine](https://img.shields.io/badge/Engine-Python-yellow)
 
 A high performance Minecraft-Style Voxel Engine written in Python with PyGame and ModernGL for graphics rendering. I created this project to experiment with and learn about 3D graphics and OpenGL.
 
