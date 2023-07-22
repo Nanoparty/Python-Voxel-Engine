@@ -83,13 +83,13 @@ def is_void(local_voxel_pos, world_voxel_pos, world_voxels, voxel_id):
    x, y, z = local_voxel_pos
    voxel_index = x % CHUNK_SIZE + z % CHUNK_SIZE * CHUNK_SIZE + y % CHUNK_SIZE * CHUNK_AREA
 
-   if voxel_id != 8 and chunk_voxels[voxel_index] == 8:
+   if voxel_id != WATER and chunk_voxels[voxel_index] == WATER:
        return True
    
-   if voxel_id != 9 and chunk_voxels[voxel_index] == 9:
+   if voxel_id != GLASS and chunk_voxels[voxel_index] == GLASS:
        return True
    
-   if chunk_voxels[voxel_index] == 6:
+   if chunk_voxels[voxel_index] == LEAVES:
        return True
 
    if chunk_voxels[voxel_index]:
@@ -105,7 +105,7 @@ def add_data(vertex_data, index, *vertices):
     return index
 
 @njit
-def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels):
+def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels, transparent=False):
     vertex_data = np.empty(CHUNK_VOL * 18 * format_size, dtype='uint32')
     index = 0
 
@@ -113,8 +113,29 @@ def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels):
         for y in range(CHUNK_SIZE):
             for z in range(CHUNK_SIZE):
                 voxel_id = chunk_voxels[x + CHUNK_SIZE * z + CHUNK_AREA * y]
+
                 if not voxel_id:
                     continue
+
+                if not transparent:
+                    if voxel_id == WATER:
+                        continue
+                    if voxel_id == LEAVES:
+                        continue
+                    if voxel_id == GLASS:
+                        continue
+
+                if transparent:
+                    can_render = False
+                    if voxel_id == WATER:
+                        can_render = True
+                    if voxel_id == LEAVES:
+                        can_render = True
+                    if voxel_id == GLASS:
+                        can_render = True
+                    
+                    if can_render != True:
+                        continue
 
                 # voxel world position
                 cx, cy, cz = chunk_pos

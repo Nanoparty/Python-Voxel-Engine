@@ -12,6 +12,7 @@ class Chunk:
         self.m_model = self.get_model_matrix()
         self.voxels: np.array = None
         self.mesh: ChunkMesh = None
+        self.transparent_mesh: ChunkMesh = None
         self.is_empty = True
 
         self.center = (glm.vec3(self.position) + 0.5) * CHUNK_SIZE
@@ -26,11 +27,17 @@ class Chunk:
 
     def build_mesh(self):
         self.mesh = ChunkMesh(self)
+        self.transparent_mesh = ChunkMesh(self, transparent=True)
 
     def render(self):
         if not self.is_empty and self.is_on_frustum(self):
             self.set_uniform()
             self.mesh.render()
+
+    def render_transparent(self):
+        if not self.is_empty and self.is_on_frustum(self):
+            self.set_uniform()
+            self.transparent_mesh.render()
 
     def build_voxels(self):
         # empty chunk

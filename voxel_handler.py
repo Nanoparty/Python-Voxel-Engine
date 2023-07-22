@@ -28,6 +28,7 @@ class VoxelHandler:
                 _, voxel_index, _, chunk = result
                 chunk.voxels[voxel_index] = self.new_voxel_id
                 chunk.mesh.rebuild()
+                chunk.transparent_mesh.rebuild()
 
                 # was it an empty chunk
                 if chunk.is_empty:
@@ -37,6 +38,7 @@ class VoxelHandler:
         index = get_chunk_index(adj_voxel_pos)
         if index != -1:
             self.chunks[index].mesh.rebuild()
+            self.chunks[index].transparent_mesh.rebuild()
 
     def rebuild_adjacent_chunks(self):
         lx, ly, lz = self.voxel_local_pos
@@ -62,6 +64,7 @@ class VoxelHandler:
             return
         self.chunk.voxels[self.voxel_index] = 0
         self.chunk.mesh.rebuild()
+        self.chunk.transparent_mesh.rebuild()
         self.rebuild_adjacent_chunks()
 
     def set_voxel(self):

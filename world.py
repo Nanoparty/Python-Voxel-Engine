@@ -36,3 +36,5 @@ class World:
     def render(self):
         for chunk in self.chunks:
             chunk.render()
+        for chunk in self.chunks:
+            chunk.render_transparent()
