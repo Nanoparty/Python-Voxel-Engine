@@ -13,6 +13,7 @@ class Textures:
         self.hotbar_texture = self.load('item_frame.png')
         self.hotbar_icon_texture = self.load('bricks.png')
         self.inventory_texture = self.load('inventory.png')
+        self.underwater_texture = self.load('underwater2.png')
 
         # assign texture unit
         self.texture_0.use(location=0)
@@ -21,6 +22,7 @@ class Textures:
         self.hotbar_texture.use(location=3)
         self.hotbar_icon_texture.use(location=4)
         self.inventory_texture.use(location=5)
+        self.underwater_texture.use(location=6)
 
     def load(self, file_name, is_tex_array=False):
         texture = pg.image.load(f'assets/{file_name}')

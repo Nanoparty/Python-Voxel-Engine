@@ -2,21 +2,45 @@ import pygame as pg
 from camera import Camera
 from settings import *
 from world_objects.crosshair import Crosshair
+from meshes.underwater_mesh import UnderwaterMesh
 
 class Player(Camera):
     def __init__(self, app, position=PLAYER_POS, yaw=-90, pitch=0):
         self.app = app
         super().__init__(position, yaw, pitch)
+        #self.underwater_mesh = UnderwaterMesh(app)
         self.open_inventory = False
+        self.underwater = False
+        # if self.app.scene:
+        #     self.chunks = self.app.scene.world.chunks
         
 
     def update(self, pg):
         self.keyboard_controls()
         self.mouse_control(pg)
         super().update()
+        # if self.chunks:
+        #     voxel_type = self.get_voxel_id(self.position)
+        #     print("Voxel Type: ", voxel_type)
 
     def render(self):
         pass
+        #self.underwater_mesh.render()
+
+    def get_voxel_id(self, voxel_world_pos):
+        cx, cy, cz = chunk_pos = voxel_world_pos / CHUNK_SIZE
+
+        if 0 <= cx < WORLD_W and 0 <= cy < WORLD_H and 0 <= cz < WORLD_D:
+            chunk_index = cx + WORLD_W * cz + WORLD_AREA * cy
+            chunk = self.chunks[chunk_index]
+
+            lx, ly, lz = voxel_local_pos = voxel_world_pos - chunk_pos * CHUNK_SIZE
+
+            voxel_index = lx + CHUNK_SIZE * lz + CHUNK_AREA * ly
+            voxel_id = chunk.voxels[voxel_index]
+
+            return voxel_id, voxel_index, voxel_local_pos, chunk
+        return 0, 0, 0, 0
     
     def handle_event(self, event, pg):
         voxel_handler = self.app.scene.world.voxel_handler

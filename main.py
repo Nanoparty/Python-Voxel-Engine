@@ -50,6 +50,7 @@ class VoxelEngine:
         self.player = Player(self)
         self.shader_program = ShaderProgram(self)
         self.scene = Scene(self)
+        
 
     def update(self):
         self.player.update(pg)

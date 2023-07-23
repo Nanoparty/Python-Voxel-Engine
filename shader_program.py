@@ -12,6 +12,7 @@ class ShaderProgram:
         self.hotbar = self.get_program(shader_name='hotbar')
         self.hotbar_icon = self.get_program(shader_name='hotbar_icon')
         self.inventory = self.get_program(shader_name='inventory')
+        self.underwater = self.get_program(shader_name='underwater')
         #-----------------------------#
         self.set_uniforms_on_init()
 
@@ -37,6 +38,9 @@ class ShaderProgram:
 
         # inventory
         self.inventory['u_texture_0'] = 5
+
+        # underwater
+        self.underwater['u_texture_0'] = 6
 
 
     def update(self):
