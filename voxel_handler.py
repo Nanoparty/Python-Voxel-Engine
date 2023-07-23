@@ -18,7 +18,7 @@ class VoxelHandler:
         self.interaction_mode = 0 # 0: remove voxel 1: add voxel
         self.new_voxel_id = 1
 
-    def add_voxel(self):
+    def add_voxel(self, pg, sounds):
         if self.voxel_id:
             # check voxel id along normal
             result = self.get_voxel_id(self.voxel_world_pos + self.voxel_normal)
@@ -29,6 +29,8 @@ class VoxelHandler:
                 chunk.voxels[voxel_index] = self.new_voxel_id
                 chunk.mesh.rebuild()
                 chunk.transparent_mesh.rebuild()
+                sound = self.get_sound(self.new_voxel_id, sounds)
+                pg.mixer.Sound.play(sound)
 
                 # was it an empty chunk
                 if chunk.is_empty:
@@ -59,19 +61,24 @@ class VoxelHandler:
         elif lz == CHUNK_SIZE - 1:
             self.rebuild_adj_chunk((wx, wy, wz + 1))
             
-    def remove_voxel(self):
+    def remove_voxel(self, pg, sounds):
         if self.voxel_index == None:
             return
+        if self.chunk.voxels[self.voxel_index] == 0:
+            return
+        sound = self.get_sound(self.chunk.voxels[self.voxel_index], sounds)
+        pg.mixer.Sound.play(sound)
         self.chunk.voxels[self.voxel_index] = 0
         self.chunk.mesh.rebuild()
         self.chunk.transparent_mesh.rebuild()
         self.rebuild_adjacent_chunks()
+        self.voxel_index = None
 
-    def set_voxel(self):
+    def set_voxel(self, pg, sounds):
         if self.interaction_mode:
-            self.add_voxel()
+            self.add_voxel(pg, sounds)
         else:
-            self.remove_voxel()
+            self.remove_voxel(pg, sounds)
 
     def set_voxel_id(self, id):
         self.new_voxel_id = id;
@@ -85,6 +92,11 @@ class VoxelHandler:
 
     def update(self):
         self.ray_cast()
+
+    def get_sound(self, voxel_id, sounds):
+        if RED_TULIP <= voxel_id <= TALL_GRASS:
+            return sounds["grass"]
+        return sounds["block"]
 
     def ray_cast(self):
         # start point

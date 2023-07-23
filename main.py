@@ -29,6 +29,19 @@ class VoxelEngine:
         pg.event.set_grab(True)
         pg.mouse.set_visible(False)
 
+        sounds = {}
+        block_sound = pg.mixer.Sound("assets/audio/block3.mp3")
+        grass_sound = pg.mixer.Sound("assets/audio/grass.mp3")
+        block_sound.set_volume(0.2)
+
+        sounds["block"] = block_sound
+        sounds["grass"]  = grass_sound
+
+        self.sounds = sounds
+
+        pg.mixer.music.load("assets/audio/sweden.mp3")
+        pg.mixer.music.play(loops=-1)
+
         self.is_running = True
         self.on_init()
 

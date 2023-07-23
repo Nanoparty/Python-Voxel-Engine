@@ -38,9 +38,7 @@ class Player(Camera):
 
             # adding and removing voxels with clicks
             if event.button == 1:
-                voxel_handler.set_voxel()
-                print("Mouse Pos:", pg.mouse.get_pos())
-                print("Voxel_id:", voxel_handler.new_voxel_id)
+                voxel_handler.set_voxel(pg, self.app.sounds)
             if event.button == 3:
                 voxel_handler.switch_mode()
         
