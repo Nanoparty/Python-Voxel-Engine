@@ -77,6 +77,12 @@ def set_voxel_id(voxels, x, y, z, wx, wy, wz, world_height):
     if wy < DIRT_LVL:
         place_melons(voxels, x, y, z, voxel_id)
 
+    if wy < DIRT_LVL:
+        place_flowers(voxels, x, y, z, voxel_id)
+
+    if wy < DIRT_LVL:
+        place_shrubs(voxels, x, y, z, voxel_id)
+
     # place water
     if wy < WATER_LVL:
         water_height = WATER_LVL - wy
@@ -108,8 +114,58 @@ def place_melons(voxels, x, y, z, voxel_id):
     # dirt under the tree
     voxels[get_index(x, y, z)] = DIRT
 
-    # pumpkin
+    # melon
     voxels[get_index(x, y + 1, z)] = MELON
+
+@njit
+def place_shrubs(voxels, x, y, z, voxel_id):
+    rnd = random()
+    if voxel_id != GRASS or rnd > SHRUB_PROBABILITY:
+        return None
+    if voxels[get_index(x, y + 1, z)] != VOID:
+        return None
+    
+    # dirt under the tree
+    voxels[get_index(x, y, z)] = GRASS
+
+    grass_type = SHORT_GRASS
+    rnd = math.ceil(random() * 10)
+    if rnd < 4:
+        grass_type = TALL_GRASS
+
+    # grass
+    voxels[get_index(x, y + 1, z)] = grass_type
+
+@njit
+def place_flowers(voxels, x, y, z, voxel_id):
+    rnd = random()
+    if voxel_id != GRASS or rnd > FLOWER_PROBABILITY:
+        return None
+    if voxels[get_index(x, y + 1, z)] != VOID:
+        return None
+    
+    # dirt under the tree
+    voxels[get_index(x, y, z)] = GRASS
+
+    flower_type = RED_TULIP
+    rnd = math.ceil(random() * 7);
+    if rnd == 1:
+        flower_type = RED_TULIP
+    if rnd == 2:
+        flower_type = WHITE_TULIP
+    if rnd == 3:
+        flower_type = PINK_TULIP
+    if rnd == 4:
+        flower_type = ORANGE_TULIP
+    if rnd == 5:
+        flower_type = PEONY
+    if rnd == 6:
+        flower_type = DANDELION
+    if rnd == 7:
+        flower_type = RED_MUSHROOM
+
+    # flower
+    voxels[get_index(x, y + 1, z)] = flower_type
 
 
 @njit

@@ -83,13 +83,49 @@ def is_void(local_voxel_pos, world_voxel_pos, world_voxels, voxel_id):
    x, y, z = local_voxel_pos
    voxel_index = x % CHUNK_SIZE + z % CHUNK_SIZE * CHUNK_SIZE + y % CHUNK_SIZE * CHUNK_AREA
 
+    # Transparent Single Blocks
    if voxel_id != WATER and chunk_voxels[voxel_index] == WATER:
        return True
    
    if voxel_id != GLASS and chunk_voxels[voxel_index] == GLASS:
        return True
    
+#    for voxel_type in TRANSPARENT_BLOCKS_SINGLE:
+#        if voxel_id != voxel_type and chunk_voxels[voxel_index] == voxel_type:
+#            return True
+       
+#    for voxel_type in TRANSPARENT_BLOCKS:
+#     if chunk_voxels[voxel_index] == voxel_type:
+#         return True
+   
    if chunk_voxels[voxel_index] == LEAVES:
+       return True
+   
+   if chunk_voxels[voxel_index] == RED_TULIP:
+       return True
+   
+   if chunk_voxels[voxel_index] == WHITE_TULIP:
+       return True
+   
+   if chunk_voxels[voxel_index] == PINK_TULIP:
+       return True
+   
+   if chunk_voxels[voxel_index] == PEONY:
+       return True
+   
+   if chunk_voxels[voxel_index] == ORANGE_TULIP:
+       return True
+   
+   if chunk_voxels[voxel_index] == RED_MUSHROOM:
+       return True
+   
+   if chunk_voxels[voxel_index] == DANDELION:
+       return True
+   
+   if chunk_voxels[voxel_index] == SHORT_GRASS:
+       return True
+   
+   if chunk_voxels[voxel_index] == TALL_GRASS:
        return True
 
    if chunk_voxels[voxel_index]:
@@ -118,20 +154,69 @@ def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels, transpa
                     continue
 
                 if not transparent:
+                    # for voxel_type in TRANSPARENT_BLOCKS:
+                    #     if voxel_id == voxel_type:
+                    #         continue
+                    # for voxel_type in TRANSPARENT_BLOCKS_SINGLE:
+                    #     if voxel_id == voxel_type:
+                    #         continue
                     if voxel_id == WATER:
                         continue
                     if voxel_id == LEAVES:
                         continue
                     if voxel_id == GLASS:
                         continue
+                    if voxel_id == RED_TULIP:
+                        continue
+                    if voxel_id == WHITE_TULIP:
+                        continue
+                    if voxel_id == PINK_TULIP:
+                        continue
+                    if voxel_id == PEONY:
+                        continue
+                    if voxel_id == ORANGE_TULIP:
+                        continue
+                    if voxel_id == RED_MUSHROOM:
+                        continue
+                    if voxel_id == DANDELION:
+                        continue
+                    if voxel_id == SHORT_GRASS:
+                        continue
+                    if voxel_id == TALL_GRASS:
+                        continue
+                    
 
                 if transparent:
                     can_render = False
+                    # for voxel_type in TRANSPARENT_BLOCKS:
+                    #     if voxel_id == voxel_type:
+                    #         can_render = True
+                    # for voxel_type in TRANSPARENT_BLOCKS_SINGLE:
+                    #     if voxel_id == voxel_type:
+                    #         can_render = True
                     if voxel_id == WATER:
                         can_render = True
                     if voxel_id == LEAVES:
                         can_render = True
                     if voxel_id == GLASS:
+                        can_render = True
+                    if voxel_id == RED_TULIP:
+                        can_render = True
+                    if voxel_id == WHITE_TULIP:
+                        can_render = True
+                    if voxel_id == PINK_TULIP:
+                        can_render = True
+                    if voxel_id == ORANGE_TULIP:
+                        can_render = True
+                    if voxel_id == PEONY:
+                        can_render = True
+                    if voxel_id == RED_MUSHROOM:
+                        can_render = True
+                    if voxel_id == SHORT_GRASS:
+                        can_render = True
+                    if voxel_id == TALL_GRASS:
+                        can_render = True
+                    if voxel_id == DANDELION:
                         can_render = True
                     
                     if can_render != True:
@@ -142,6 +227,66 @@ def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels, transpa
                 wx = x + cx * CHUNK_SIZE
                 wz = z + cz * CHUNK_SIZE
                 wy = y + cy * CHUNK_SIZE
+
+                # billboard
+                if RED_TULIP <= voxel_id <= TALL_GRASS:
+                    # diagonal 1
+                    ao = get_ao((x + 1, y, z), (wx + 1, wy, wz), world_voxels, 'X', voxel_id)
+                    flip_id = ao[1] + ao[3] > ao[0] + ao[2]
+
+                    v0 = pack_data(x, y    , z    , voxel_id, 2, ao[0], flip_id)
+                    v1 = pack_data(x, y + 1, z    , voxel_id, 2, ao[1], flip_id)
+                    v2 = pack_data(x + 1, y + 1, z + 1, voxel_id, 2, ao[2], flip_id)
+                    v3 = pack_data(x + 1, y    , z + 1, voxel_id, 2, ao[3], flip_id)
+
+                    if flip_id:
+                        index = add_data(vertex_data, index, v3, v0, v1, v3, v1, v2)
+                    else:
+                        index = add_data(vertex_data, index, v0, v1, v2, v0, v2, v3)
+
+                    # diagonal 2
+                    ao = get_ao((x + 1, y, z), (wx + 1, wy, wz), world_voxels, 'X', voxel_id)
+                    flip_id = ao[1] + ao[3] > ao[0] + ao[2]
+
+                    v0 = pack_data(x + 1, y    , z + 1    , voxel_id, 2, ao[0], flip_id)
+                    v1 = pack_data(x + 1, y + 1, z + 1    , voxel_id, 2, ao[1], flip_id)
+                    v2 = pack_data(x, y + 1, z, voxel_id, 2, ao[2], flip_id)
+                    v3 = pack_data(x, y    , z, voxel_id, 2, ao[3], flip_id)
+
+                    if flip_id:
+                        index = add_data(vertex_data, index, v3, v0, v1, v3, v1, v2)
+                    else:
+                        index = add_data(vertex_data, index, v0, v1, v2, v0, v2, v3)
+
+                    # diagonal 3
+                    ao = get_ao((x + 1, y, z), (wx + 1, wy, wz), world_voxels, 'X', voxel_id)
+                    flip_id = ao[1] + ao[3] > ao[0] + ao[2]
+
+                    v0 = pack_data(x + 1, y    , z    , voxel_id, 2, ao[0], flip_id)
+                    v1 = pack_data(x + 1, y + 1, z    , voxel_id, 2, ao[1], flip_id)
+                    v2 = pack_data(x, y + 1, z + 1, voxel_id, 2, ao[2], flip_id)
+                    v3 = pack_data(x, y    , z + 1, voxel_id, 2, ao[3], flip_id)
+
+                    if flip_id:
+                        index = add_data(vertex_data, index, v3, v0, v1, v3, v1, v2)
+                    else:
+                        index = add_data(vertex_data, index, v0, v1, v2, v0, v2, v3)
+
+                    # diagonal 4
+                    ao = get_ao((x + 1, y, z), (wx + 1, wy, wz), world_voxels, 'X', voxel_id)
+                    flip_id = ao[1] + ao[3] > ao[0] + ao[2]
+
+                    v0 = pack_data(x, y, z + 1    , voxel_id, 2, ao[0], flip_id)
+                    v1 = pack_data(x, y + 1, z + 1   , voxel_id, 2, ao[1], flip_id)
+                    v2 = pack_data(x + 1, y + 1, z, voxel_id, 2, ao[2], flip_id)
+                    v3 = pack_data(x + 1,y, z, voxel_id, 2, ao[3], flip_id)
+
+                    if flip_id:
+                        index = add_data(vertex_data, index, v3, v0, v1, v3, v1, v2)
+                    else:
+                        index = add_data(vertex_data, index, v0, v1, v2, v0, v2, v3)
+                    
+                    continue
 
                 # top face
                 if is_void((x, y + 1, z), (wx, wy + 1, wz), world_voxels, voxel_id):
