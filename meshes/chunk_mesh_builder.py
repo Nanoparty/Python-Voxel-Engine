@@ -1,5 +1,7 @@
 from settings import *
-from numba import uint8, njit
+from numba import uint8, njit, jit
+from random import random
+
 
 @njit
 def get_ao(local_pos, world_pos, world_voxels, plane, voxel_id):
@@ -139,6 +141,154 @@ def add_data(vertex_data, index, *vertices):
         vertex_data[index] = vertex
         index += 1
     return index
+
+@njit
+def build_sorted_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels, player_pos, transparent=True):
+    vertex_data = np.empty(CHUNK_VOL * 18 * format_size, dtype='uint32')
+    index = 0
+
+    sorted_voxels = []
+    for x in range(CHUNK_SIZE):
+        for y in range(CHUNK_SIZE):
+            for z in range(CHUNK_SIZE):
+                
+                voxel_id = chunk_voxels[x + CHUNK_SIZE * z + CHUNK_AREA * y]
+                
+                can_render = False
+                if voxel_id == WATER:
+                    can_render = True
+                if voxel_id == LEAVES:
+                    can_render = True
+                if voxel_id == GLASS:
+                    can_render = True
+                if RED_TULIP <= voxel_id <= TALL_GRASS:
+                    can_render = True
+                
+                if can_render != True:
+                    continue
+                
+                distance = np.sqrt(np.power(player_pos[0]-x, 2) + np.power(player_pos[1]-y, 2) + np.power(player_pos[2]-z, 2))
+                
+                sorted_voxels.append((x, y, z, voxel_id, distance))
+
+    if len(sorted_voxels) == 0:
+        vertex_data[:index + 1]
+    
+    sorted(sorted_voxels, key=lambda t: t[3], reverse=False)
+
+    for voxel in sorted_voxels:
+        x = voxel[0]
+        y = voxel[1]
+        z = voxel[2]
+        voxel_id = voxel[3]
+        
+
+        # voxel world position
+        cx, cy, cz = chunk_pos
+        print("chunk ", cx, " ", cy, " ", cz)
+        wx = x + cx * CHUNK_SIZE
+        wz = z + cz * CHUNK_SIZE
+        wy = y + cy * CHUNK_SIZE
+
+        # top face
+        if is_void((x, y + 1, z), (wx, wy + 1, wz), world_voxels, voxel_id):
+            # get ao values
+            ao = get_ao((x, y + 1, z), (wx, wy + 1, wz), world_voxels,'Y', voxel_id)
+            flip_id = ao[1] + ao[3] > ao[0] + ao[2]
+
+            # format: x, y, z, voxel_id, face_id, ao_id
+            v0 = pack_data(x    , y + 1, z    , voxel_id, 0, ao[0], flip_id)
+            v1 = pack_data(x + 1, y + 1, z    , voxel_id, 0, ao[1], flip_id)
+            v2 = pack_data(x + 1, y + 1, z + 1, voxel_id, 0, ao[2], flip_id)
+            v3 = pack_data(x    , y + 1, z + 1, voxel_id, 0, ao[3], flip_id)
+
+            if flip_id:
+                index = add_data(vertex_data, index, v1, v0, v3, v1, v3, v2)
+            else:
+                index = add_data(vertex_data, index, v0, v3, v2, v0, v2, v1)
+
+        # bottom face
+        if is_void((x, y - 1, z), (wx, wy - 1, wz), world_voxels, voxel_id):
+            ao = get_ao((x, y - 1, z), (wx, wy - 1, wz), world_voxels,'Y', voxel_id)
+            flip_id = ao[1] + ao[3] > ao[0] + ao[2]
+
+            v0 = pack_data(x    , y, z    , voxel_id, 1, ao[0], flip_id)
+            v1 = pack_data(x + 1, y, z    , voxel_id, 1, ao[1], flip_id)
+            v2 = pack_data(x + 1, y, z + 1, voxel_id, 1, ao[2], flip_id)
+            v3 = pack_data(x    , y, z + 1, voxel_id, 1, ao[3], flip_id)
+
+            if flip_id:
+                index = add_data(vertex_data, index, v1, v3, v0, v1, v2, v3)
+            else:
+                index = add_data(vertex_data, index, v0, v2, v3, v0, v1, v2)
+
+        # right face
+        if is_void((x + 1, y, z), (wx + 1, wy, wz), world_voxels, voxel_id):
+            ao = get_ao((x + 1, y, z), (wx + 1, wy, wz), world_voxels, 'X', voxel_id)
+            flip_id = ao[1] + ao[3] > ao[0] + ao[2]
+
+            v0 = pack_data(x + 1, y    , z    , voxel_id, 2, ao[0], flip_id)
+            v1 = pack_data(x + 1, y + 1, z    , voxel_id, 2, ao[1], flip_id)
+            v2 = pack_data(x + 1, y + 1, z + 1, voxel_id, 2, ao[2], flip_id)
+            v3 = pack_data(x + 1, y    , z + 1, voxel_id, 2, ao[3], flip_id)
+            
+            if flip_id:
+                index = add_data(vertex_data, index, v3, v0, v1, v3, v1, v2)
+            else:
+                index = add_data(vertex_data, index, v0, v1, v2, v0, v2, v3)
+
+        # left face
+        if is_void((x - 1, y, z), (wx - 1, wy, wz), world_voxels, voxel_id):
+            ao = get_ao((x - 1, y, z), (wx - 1, wy, wz), world_voxels, 'X', voxel_id)
+            flip_id = ao[1] + ao[3] > ao[0] + ao[2]
+
+            v0 = pack_data(x, y    , z    , voxel_id, 3, ao[0], flip_id)
+            v1 = pack_data(x, y + 1, z    , voxel_id, 3, ao[1], flip_id)
+            v2 = pack_data(x, y + 1, z + 1, voxel_id, 3, ao[2], flip_id)
+            v3 = pack_data(x, y    , z + 1, voxel_id, 3, ao[3], flip_id)
+
+            if flip_id:
+                index = add_data(vertex_data, index, v3, v1, v0, v3, v2, v1)
+            else:
+                index = add_data(vertex_data, index, v0, v2, v1, v0, v3, v2)
+
+        # back face
+        if is_void((x, y, z - 1), (wx, wy, wz - 1), world_voxels, voxel_id):
+            ao = get_ao((x, y, z - 1), (wx, wy, wz - 1), world_voxels, 'Z', voxel_id)
+            flip_id = ao[1] + ao[3] > ao[0] + ao[2]
+
+            v0 = pack_data(x,     y,     z, voxel_id, 4, ao[0], flip_id)
+            v1 = pack_data(x,     y + 1, z, voxel_id, 4, ao[1], flip_id)
+            v2 = pack_data(x + 1, y + 1, z, voxel_id, 4, ao[2], flip_id)
+            v3 = pack_data(x + 1, y,     z, voxel_id, 4, ao[3], flip_id)
+
+            if flip_id:
+                index = add_data(vertex_data, index, v3, v0, v1, v3, v1, v2)
+            else:
+                index = add_data(vertex_data, index, v0, v1, v2, v0, v2, v3)
+
+        # front face
+        if is_void((x, y, z + 1), (wx, wy, wz + 1), world_voxels, voxel_id):
+            ao = get_ao((x, y, z + 1), (wx, wy, wz + 1), world_voxels, 'Z', voxel_id)
+            flip_id = ao[1] + ao[3] > ao[0] + ao[2]
+
+            v0 = pack_data(x    , y    , z + 1, voxel_id, 5, ao[0], flip_id)
+            v1 = pack_data(x    , y + 1, z + 1, voxel_id, 5, ao[1], flip_id)
+            v2 = pack_data(x + 1, y + 1, z + 1, voxel_id, 5, ao[2], flip_id)
+            v3 = pack_data(x + 1, y    , z + 1, voxel_id, 5, ao[3], flip_id)
+
+            if flip_id:
+                index = add_data(vertex_data, index, v3, v1, v0, v3, v2, v1)
+            else:
+                index = add_data(vertex_data, index, v0, v2, v1, v0, v3, v2)
+
+    return vertex_data[:index + 1]
+
+@njit
+def sort_me_numba(arr):
+    res = sorted(arr, key=lambda x: x[1], reverse=True)
+    return res
+
 
 @njit
 def build_chunk_mesh(chunk_voxels, format_size, chunk_pos, world_voxels, transparent=False):

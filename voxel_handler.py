@@ -27,8 +27,8 @@ class VoxelHandler:
             if not result[0]:
                 _, voxel_index, _, chunk = result
                 chunk.voxels[voxel_index] = self.new_voxel_id
-                chunk.mesh.rebuild()
-                chunk.transparent_mesh.rebuild()
+                #chunk.mesh.rebuild()
+                #self.rebuild_all_chunks_transparent()
                 sound = self.get_sound(self.new_voxel_id, sounds)
                 pg.mixer.Sound.play(sound)
 
@@ -41,6 +41,14 @@ class VoxelHandler:
         if index != -1:
             self.chunks[index].mesh.rebuild()
             self.chunks[index].transparent_mesh.rebuild()
+
+    def rebuild_all_chunks_transparent(self):
+        for chunk in self.chunks:
+            chunk.transparent_mesh.rebuild()
+
+    def rebuild_all_chunks_opaque(self):
+        for chunk in self.chunks:
+            chunk.mesh.rebuild()
 
     def rebuild_adjacent_chunks(self):
         lx, ly, lz = self.voxel_local_pos
@@ -66,12 +74,14 @@ class VoxelHandler:
             return
         if self.chunk.voxels[self.voxel_index] == 0:
             return
+        print("Removing voxel:", self.chunk.voxels[self.voxel_index])
         sound = self.get_sound(self.chunk.voxels[self.voxel_index], sounds)
         pg.mixer.Sound.play(sound)
         self.chunk.voxels[self.voxel_index] = 0
-        self.chunk.mesh.rebuild()
-        self.chunk.transparent_mesh.rebuild()
-        self.rebuild_adjacent_chunks()
+        #self.chunk.mesh.rebuild()
+        #self.chunk.transparent_mesh.rebuild()
+        #self.rebuild_adjacent_chunks()
+        #self.rebuild_all_chunks_transparent()
         self.voxel_index = None
 
     def set_voxel(self, pg, sounds):

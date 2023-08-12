@@ -24,7 +24,6 @@ class Scene:
         self.inventory.update()
         player_pos = glm.ivec3(int(self.app.player.position.x),int(self.app.player.position.y), int(self.app.player.position.z))
         voxel_id = self.get_voxel_id(player_pos)
-        print("VOXEL:",voxel_id)
         if voxel_id[0] == WATER:
             self.app.player.underwater = True
         else:

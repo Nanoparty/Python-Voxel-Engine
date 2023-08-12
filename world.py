@@ -1,6 +1,8 @@
 from settings import *
 from world_objects.chunk import Chunk
 from voxel_handler import VoxelHandler
+import moderngl as mgl
+from random import random
 
 class World:
     def __init__(self, app):
@@ -34,7 +36,10 @@ class World:
         self.voxel_handler.update()
 
     def render(self):
+        #print("render world", random())
         for chunk in self.chunks:
             chunk.render()
+        self.app.ctx.disable(flags=mgl.DEPTH_TEST)
         for chunk in self.chunks:
             chunk.render_transparent()
+        self.app.ctx.enable(flags=mgl.DEPTH_TEST)

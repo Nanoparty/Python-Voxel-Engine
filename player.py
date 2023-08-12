@@ -48,6 +48,10 @@ class Player(Camera):
 
         # toggle inventory
         if event.type == pg.KEYDOWN:
+            if event.key == pg.K_r:
+                voxel_handler.rebuild_all_chunks_transparent()
+            if event.key == pg.K_t:
+                voxel_handler.rebuild_all_chunks_opaque()
             if event.key == pg.K_e:
                 inventory.toggle_visible()
                 self.open_inventory = 1 - self.open_inventory

@@ -1,5 +1,7 @@
 from meshes.base_mesh import BaseMesh
-from meshes.chunk_mesh_builder import build_chunk_mesh
+from meshes.chunk_mesh_builder import build_chunk_mesh, build_sorted_chunk_mesh
+from random import random
+
 
 class ChunkMesh(BaseMesh):
     def __init__(self, chunk, transparent=False):
@@ -18,12 +20,29 @@ class ChunkMesh(BaseMesh):
     def rebuild(self):
         self.vao = self.get_vao()
 
+    def rebuild_transparent(self):
+        if self.is_transparent:
+            self.vao = self.get_vao()
+
     def get_vertex_data(self):
-        mesh = build_chunk_mesh(
+        if self.is_transparent:
+            return build_sorted_chunk_mesh(
+            chunk_voxels=self.chunk.voxels,
+            format_size=self.format_size,
+            chunk_pos=self.chunk.position,
+            world_voxels=self.chunk.world.voxels,
+            player_pos=self.app.player.position
+            )
+        else:
+            return build_chunk_mesh(
             chunk_voxels=self.chunk.voxels,
             format_size=self.format_size,
             chunk_pos=self.chunk.position,
             world_voxels=self.chunk.world.voxels,
             transparent=self.is_transparent
-        )
-        return mesh
+            )
+
+    def render(self):
+        #print("render chunk mesh", random())
+        #self.rebuild_transparent()
+        self.vao.render()

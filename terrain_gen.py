@@ -68,8 +68,8 @@ def set_voxel_id(voxels, x, y, z, wx, wy, wz, world_height):
     voxels[get_index(x, y, z)] = voxel_id
     
     # place tree
-    if wy < DIRT_LVL:
-        place_tree(voxels, x, y, z, voxel_id)
+    # if wy < DIRT_LVL:
+    #     place_tree(voxels, x, y, z, voxel_id)
 
     if wy < DIRT_LVL:
         place_pumpkins(voxels, x, y, z, voxel_id)
@@ -77,17 +77,17 @@ def set_voxel_id(voxels, x, y, z, wx, wy, wz, world_height):
     if wy < DIRT_LVL:
         place_melons(voxels, x, y, z, voxel_id)
 
-    if wy < DIRT_LVL:
-        place_flowers(voxels, x, y, z, voxel_id)
+    # if wy < DIRT_LVL:
+    #     place_flowers(voxels, x, y, z, voxel_id)
 
-    if wy < DIRT_LVL:
-        place_shrubs(voxels, x, y, z, voxel_id)
+    # if wy < DIRT_LVL:
+    #     place_shrubs(voxels, x, y, z, voxel_id)
 
     # place water
-    if wy < WATER_LVL:
-        water_height = WATER_LVL - wy
-        for iy in range(1, water_height):
-            voxels[get_index(x, y + iy, z)] = WATER
+    # if wy < WATER_LVL:
+    #     water_height = WATER_LVL - wy
+    #     for iy in range(1, water_height):
+    #         voxels[get_index(x, y + iy, z)] = WATER
 
 @njit
 def place_pumpkins(voxels, x, y, z, voxel_id):
