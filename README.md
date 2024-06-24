@@ -28,4 +28,6 @@ This project uses the following libraries:
 - [Pygame](https://www.pygame.org/news)
 - [ModernGL](https://moderngl.readthedocs.io/en/latest/)
 
+Based on the Voxel Engine tutorial from CoderSpace
+
 © Nathan Foote | 2023
